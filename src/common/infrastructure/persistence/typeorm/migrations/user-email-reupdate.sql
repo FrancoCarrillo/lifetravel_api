@@ -1,1 +1,0 @@
-ALTER TABLE users MODIFY email VARCHAR(355);
