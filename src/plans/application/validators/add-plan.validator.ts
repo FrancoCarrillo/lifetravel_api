@@ -13,13 +13,30 @@ export class AddPlanValidator {
   ) {}
 
   public async validate(
-    addPlanRequestDTO: AddPlanRequestDto,
+    addPlanRequestDto: AddPlanRequestDto,
   ): Promise<AppNotification> {
     let notification: AppNotification = new AppNotification();
-    const name: string = addPlanRequestDTO.name.trim();
-    if (name.length <= 0) {
-      notification.addError('Plan name is required', null);
+
+    const price: number = addPlanRequestDto.price;
+    if(price <= 0){
+      notification.addError('Price invalid', null);
     }
+
+    const travelDays: number = addPlanRequestDto.travelDays;
+    if(travelDays <= 0){
+      notification.addError('Travel days invalid', null);
+    }
+
+    if(notification.hasErrors()){
+      return notification;
+    }
+
+    //Validad que exista la ciudad en la base de datos
+    const cityId: number = addPlanRequestDto.cityId;
+    if(cityId <= 0){
+      notification.addError('City id invalid', null);
+    }
+
     return notification;
   }
 }

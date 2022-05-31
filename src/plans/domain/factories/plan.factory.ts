@@ -1,11 +1,9 @@
 import { Plan } from "../entities/plan.entity";
+import { City } from "../value-object/city.value";
 
 export class PlanFactory {
-  public static createFrom(
-  name: string,  description: string,  price: number,  nameCity: string,  nameCountry: string, nameMoney: string,
-  changeValue_money: number, kindCityName: string, kindCityDescription: string, startDate: Date, endDate: Date,clientId: number): Plan {
-    return new Plan(name, description, price, nameCity, nameCountry, nameMoney, changeValue_money, kindCityName, kindCityDescription, startDate, endDate, clientId);
+  public static createFrom(id: number, price: number, travelDays: number, city: City): Plan {
+    return new Plan(id, price, travelDays, city);
   }
 
-  public static withId(){}
 }

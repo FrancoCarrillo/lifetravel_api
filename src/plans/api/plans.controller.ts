@@ -16,11 +16,11 @@ export class PlansController {
 
 @Post()
 async add(
-  @Body() addPlanRequest: AddPlanRequestDto,
+  @Body() addPlanRequestDto: AddPlanRequestDto,
   @Res({ passthrough: true }) response
 ): Promise<object> {
   try{
-    const result: Result<AppNotification, AddPlanResponseDto> = await this.plansApplicationService.add(addPlanRequest);
+    const result: Result<AppNotification, AddPlanResponseDto> = await this.plansApplicationService.add(addPlanRequestDto);
     if (result.isSuccess()){
       return ApiController.created(response, result.value);
     }
