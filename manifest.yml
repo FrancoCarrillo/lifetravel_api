@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: banking-ddd-nest-ebautista
+  - name: lifetravel-dreamteam
     memory: 512MB
     instances: 1
     buildpacks:
