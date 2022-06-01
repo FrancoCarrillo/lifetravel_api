@@ -6,6 +6,7 @@ import { Result } from "typescript-result";
 import { AppNotification } from "../../common/application/app.notification";
 import { AddPlanResponseDto } from "../application/dtos/response/add-plan-response.dto";
 import { ApiController } from "../../common/api/api.controller";
+import { GetPlanQuery } from "../application/queries/get-plan.query";
 
 @Controller('plans')
 export class PlansController {
@@ -29,5 +30,15 @@ async add(
   catch (error){
     return ApiController.serverError(response, error);
   }
+}
+
+@Get()
+async getPlan(@Res({ passthrough: true }) response): Promise<object> {
+    try {
+      const plans = await this.queryBus.execute( new GetPlanQuery());
+      return ApiController.ok(response, plans);
+    } catch (error) {
+      return ApiController.serverError(response, error);
+    }
 }
 }
