@@ -6,13 +6,14 @@ import { PlansApplicationService } from "./application/services/plans-applicatio
 import { PlansController } from "./api/plans.controller";
 import { PlanTypeORM } from "./infrastructure/persistence/typeorm/entities/plan.typeorm";
 import { AddPlanValidator } from "./application/validators/add-plan.validator";
+import { CityTypeORM } from "./infrastructure/persistence/typeorm/entities/city.typeorm";
 
 export const CommandHandlers = [AddPlanHandler];
 
 @Module({
   imports: [
     CqrsModule,
-    TypeOrmModule.forFeature([PlanTypeORM]),
+    TypeOrmModule.forFeature([PlanTypeORM, CityTypeORM]),
   ],
   exports: [TypeOrmModule],
   controllers: [PlansController],
@@ -22,4 +23,4 @@ export const CommandHandlers = [AddPlanHandler];
     ...CommandHandlers,
   ]
 })
-export class PlansModule {}
+export class ServicesModule {}
