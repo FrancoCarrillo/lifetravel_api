@@ -5,7 +5,6 @@ import { PlanTypeORM } from "../../../infrastructure/persistence/typeorm/entitie
 import { Plan } from "../../../domain/entities/plan.entity";
 import { PlanFactory } from "../../../domain/factories/plan.factory";
 import { PlanMapper } from "../../mapper/plan.mapper";
-import { Inject } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { City } from "../../../domain/value-object/city.value";
 
@@ -21,11 +20,11 @@ export class AddPlanHandler implements ICommandHandler<AddPlan> {
     let planId: number = 0;
     const price: number = command.price;
     const travelDays: number = command.travelDays;
-    //Posible error, por el mal llenado de la ciudad
-    const cityId: City = new City();
 
-    let plan: Plan = PlanFactory.createFrom(planId, price, travelDays, cityId);
-    //Posible error por estructura del ORM y el PlanMapper
+    const city: City = new City();
+    city.id = command.cityId;
+
+    let plan: Plan = PlanFactory.createFrom(planId, price, travelDays, city);
     let planTypeORM: PlanTypeORM = PlanMapper.toTypeORM(plan);
     planTypeORM = await this.planRepository.save(planTypeORM);
 

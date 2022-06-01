@@ -7,8 +7,7 @@ export class PlanMapper{
     planTypeORM.id = plan.id;
     planTypeORM.price = plan.price;
     planTypeORM.travelDays = plan.travelDays;
-    //Llenar correactamente este valor
-    planTypeORM.cityId = 1;
+    planTypeORM.cityId = plan.city.id;
 
     return planTypeORM;
   }
