@@ -14,11 +14,10 @@ export class GetClientsHandler implements IQueryHandler<GetClientsQuery> {
             c.user_id,
             c.number,
             c.dni,
-            c.miles,
+            c.miles
         FROM
             clients c
-         ORDER BY
-         c.created_at DESC;`;
+        ;`;
     const ormClients = await manager.query(sql);
     if (ormClients.length <= 0) {
       return [];

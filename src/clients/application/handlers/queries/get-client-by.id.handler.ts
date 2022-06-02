@@ -15,7 +15,7 @@ export class GetClientByIdHandler implements IQueryHandler<GetClientByIdQuery> {
             c.user_id,
             c.number,
             c.dni,
-            c.miles,
+            c.miles
         FROM
             clients c
         WHERE
