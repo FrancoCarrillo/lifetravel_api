@@ -14,4 +14,3 @@ INSERT INTO city(id, name, country_id, kind_city_id) VALUES
 (1, 'Cuzco', 1, 1),
 (2, 'Miami', 2, 2);
 
-
