@@ -13,9 +13,9 @@ export class GetClientByIdHandler implements IQueryHandler<GetClientByIdQuery> {
         SELECT
             c.id,
             c.user_id,
-            c.miles,
+            c.number,
             c.dni,
-            c.account_number,
+            c.miles,
         FROM
             clients c
         WHERE
@@ -30,7 +30,7 @@ export class GetClientByIdHandler implements IQueryHandler<GetClientByIdQuery> {
     clientDto.userId = Number(ormClient.user_id);
     clientDto.miles = Number(ormClient.miles);
     clientDto.dni = ormClient.dni;
-    clientDto.accountNumber = ormClient.account_number;
+    clientDto.number = ormClient.number;
     return clientDto;
   }
 }
