@@ -45,7 +45,10 @@ CREATE TABLE IF NOT EXISTS plans (
 
 CREATE TABLE IF NOT EXISTS users (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR(150)  NOT NULL,
+  type ENUM ('T', 'A') NOT NULL DEFAULT 'T',
+  agency_name VARCHAR(150) NULL,
+  first_name VARCHAR(75) NULL,
+  last_name VARCHAR(75) NULL,
   email VARCHAR(300)  NOT NULL,
   password VARCHAR(32)  NOT NULL,
   PRIMARY KEY(id)
@@ -55,7 +58,7 @@ CREATE TABLE IF NOT EXISTS clients (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   account_number INT  NOT NULL,
   dni VARCHAR(8)  NOT NULL,
-  miles int NOT NULL, 
+  miles int NOT NULL,
   user_id bigint UNSIGNED NOT NULL,
   PRIMARY KEY(id),
   KEY user_id(user_id),
@@ -85,3 +88,5 @@ CREATE TABLE IF NOT EXISTS trip_plans (
   CONSTRAINT FOREIGN KEY (client_id) REFERENCES clients (id),
   CONSTRAINT FOREIGN KEY (plan_id) REFERENCES plans (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
