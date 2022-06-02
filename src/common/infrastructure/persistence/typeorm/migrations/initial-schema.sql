@@ -1,30 +1,90 @@
-CREATE TABLE IF NOT EXISTS clients (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR(150)  NOT NULL,
-  id_card INT  NOT NULL,
-  dni VARCHAR(8)  NOT NULL,
-  email VARCHAR(50)  NOT NULL,
-  CONSTRAINT clients_pk PRIMARY KEY  (id)
+CREATE TABLE IF NOT EXISTS money (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(150)  NOT NULL,
+    change_value FLOAT NOT NULL,
+    PRIMARY KEY  (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS country (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(150)  NOT NULL,
+    money_id bigint UNSIGNED NOT NULL,
+    PRIMARY KEY  (id),
+    KEY money_id(money_id),
+    CONSTRAINT FOREIGN KEY (money_id) REFERENCES money (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS kind_city (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(150)  NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    PRIMARY KEY  (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS city (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(150)  NOT NULL,
+    country_id bigint UNSIGNED NOT NULL,
+    kind_city_id bigint UNSIGNED NOT NULL,
+    PRIMARY KEY  (id),
+    KEY country_id(country_id),
+    KEY kind_city_id(kind_city_id),
+    CONSTRAINT FOREIGN KEY (country_id) REFERENCES country (id),
+    CONSTRAINT FOREIGN KEY (kind_city_id) REFERENCES kind_city (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS plans (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR(50) NOT NULL,
-  description VARCHAR(150) NOT NULL,
-  name_city VARCHAR(50) NOT NULL,
-  name_country VARCHAR(50) NOT NULL,
-  name_money VARCHAR(50) NOT NULL,
-  change_value_money FLOAT NOT NULL,
-  kind_city_name VARCHAR(50) NOT NULL,
-  kind_city_description VARCHAR(150) NOT NULL,
   price FLOAT NOT NULL,
-  start_date DATETIME NOT NULL,
-  end_date DATETIME NOT NULL,
-  clients_id bigint UNSIGNED NOT NULL,
+  travel_days INT NOT NULL,
+  city_id bigint UNSIGNED NOT NULL,
   PRIMARY KEY(id),
-  KEY plans_client_id(clients_id),
-  CONSTRAINT FOREIGN KEY (clients_id) REFERENCES clients (id)
+  KEY city_id(city_id),
+  CONSTRAINT FOREIGN KEY (city_id) REFERENCES city (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  type ENUM ('T', 'A') NOT NULL DEFAULT 'T',
+  agency_name VARCHAR(150) NULL,
+  first_name VARCHAR(75) NULL,
+  last_name VARCHAR(75) NULL,
+  email VARCHAR(300)  NOT NULL,
+  password VARCHAR(32)  NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE IF NOT EXISTS clients (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  account_number INT  NOT NULL,
+  dni VARCHAR(8)  NOT NULL,
+  miles int NOT NULL,
+  user_id bigint UNSIGNED NOT NULL,
+  PRIMARY KEY(id),
+  KEY user_id(user_id),
+  CONSTRAINT FOREIGN KEY (user_id) REFERENCES users (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE IF NOT EXISTS payments (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  client_id bigint UNSIGNED NOT NULL,
+  price FLOAT NOT NULL,
+  PRIMARY KEY(id),
+  KEY client_id(client_id),
+  CONSTRAINT FOREIGN KEY (client_id) REFERENCES clients (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS trip_plans (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  payment_id bigint UNSIGNED NOT NULL,
+  client_id bigint UNSIGNED NOT NULL,
+  plan_id bigint UNSIGNED NOT NULL,
+  promotion bigint NOT NULL,
+  PRIMARY KEY(id),
+  KEY payment_id(payment_id),
+  KEY client_id(client_id),
+  KEY plan_id(plan_id),
+  CONSTRAINT FOREIGN KEY (payment_id) REFERENCES payments (id),
+  CONSTRAINT FOREIGN KEY (client_id) REFERENCES clients (id),
+  CONSTRAINT FOREIGN KEY (plan_id) REFERENCES plans (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
