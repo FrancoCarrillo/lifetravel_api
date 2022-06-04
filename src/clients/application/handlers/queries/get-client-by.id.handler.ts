@@ -13,7 +13,7 @@ export class GetClientByIdHandler implements IQueryHandler<GetClientByIdQuery> {
         SELECT
             c.id,
             c.user_id,
-            c.number,
+            c.account_number,
             c.dni,
             c.miles
         FROM
