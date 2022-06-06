@@ -24,8 +24,15 @@ export class GetPaymentIdHandler implements IQueryHandler<GetPaymentIdQuery> {
 		if (ormPrice === null) {
 			return {}
 		};
+
+		let pricePlan: number = 0;
+		const price: any[] = ormPrice.map(function(ormPrice) {
+			pricePlan = ormPrice.price;
+			return pricePlan;
+		  })
+	  
 		// client_id, price, promotion
-		const payment_id: number = await this.commandBus.execute(new AddPayment(client_id, plan_id, promotion));
+		const payment_id: number = await this.commandBus.execute(new AddPayment(client_id, pricePlan, promotion));
 
 		return payment_id;
 	}
