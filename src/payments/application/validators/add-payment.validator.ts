@@ -27,9 +27,9 @@ export class AddPaymentValidator {
       notification.addError('The client id must be greater than zero', null);
     }
 
-    const promotion: string = addPaymentDto.promotion;
-    if(promotion !== 'S' && promotion !== 'N'){
-      notification.addError('The promotion can only have a value of S or N', null);
+    const promotion: number = addPaymentDto.promotion;
+    if(promotion !== 0 && promotion !== 1){
+      notification.addError('The promotion can only have a value of 0 or 1', null);
     }
 
     if(notification.hasErrors()){
