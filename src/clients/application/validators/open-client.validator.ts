@@ -48,6 +48,10 @@ export class OpenClientValidator {
       notification.addError('User not found', null);
     }
 
+    if(userTypeORM.type !== 'T'){
+      notification.addError('The user type must be traveler', null);
+    }
+
     return notification;
   }
 }
