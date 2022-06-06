@@ -9,13 +9,14 @@ import { Module } from '@nestjs/common';
 import { ClientsApplicationService } from './application/services/clients-application.service';
 import { OpenClientValidator } from './application/validators/open-client.validator';
 import { ClientsController } from './api/clients.controller';
+import { UserTypeORM } from "../users/infrastructure/persistence/typeorm/entities/user.typeorm";
 
 export const CommandHandlers = [OpenClientHandler];
 export const EventHandlers = [ClientOpenedHandler];
 export const QueryHandlers = [GetClientsHandler, GetClientByIdHandler];
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature([ClientTypeORM])],
+  imports: [CqrsModule, TypeOrmModule.forFeature([ClientTypeORM, UserTypeORM])],
   controllers: [ClientsController],
   providers: [
     ClientsApplicationService,

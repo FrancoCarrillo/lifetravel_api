@@ -4,12 +4,16 @@ import { ClientTypeORM } from '../../../common/infrastructure/persistence/typeor
 import { Repository } from 'typeorm';
 import { OpenClientRequest } from '../dtos/request/open-client-request.dto';
 import { AppNotification } from '../../../common/application/app.notification';
+import { CityTypeORM } from "../../../services/infrastructure/persistence/typeorm/entities/city.typeorm";
+import { UserTypeORM } from "../../../users/infrastructure/persistence/typeorm/entities/user.typeorm";
 
 @Injectable()
 export class OpenClientValidator {
   constructor(
     @InjectRepository(ClientTypeORM)
     private clientRepository: Repository<ClientTypeORM>,
+    @InjectRepository(UserTypeORM)
+    private userRepository: Repository<UserTypeORM>
   ) {}
   public async validate(
     openClientRequestDto: OpenClientRequest,
@@ -33,6 +37,17 @@ export class OpenClientValidator {
     if (clientTypeORM != null) {
       notification.addError('DNI is taken', null);
     }
+
+    const userTypeORM: UserTypeORM = await this.userRepository
+      .createQueryBuilder()
+      .where("id = :id")
+      .setParameter("id", openClientRequestDto.userId)
+      .getOne();
+
+    if(userTypeORM == null) {
+      notification.addError('User not found', null);
+    }
+
     return notification;
   }
 }
