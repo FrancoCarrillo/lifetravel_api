@@ -1,3 +1,7 @@
+## Link API deployed
+
+- https://lifetravel-api.herokuapp.com/
+
 ## Requisites
 - https://dev.mysql.com/downloads/mysql
 - https://www.mysql.com/products/workbench

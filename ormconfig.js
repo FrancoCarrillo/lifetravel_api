@@ -1,6 +1,9 @@
 module.exports = {
   type: 'mysql',
-  url: process.env.LIFETRAVEL_MYSQL,
+  url:
+    process.env.ENVIRONMENT === 'prod'
+      ? process.env.DATABASE_URL
+      : 'mysql://root:root@localhost:3306/lifetravel',
   migrationsRun: true,
   logging: true,
   timezone: '+0',
