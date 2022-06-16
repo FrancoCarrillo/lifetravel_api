@@ -1,4 +1,6 @@
 import { AggregateRoot } from "@nestjs/cqrs";
+import { ClientId } from "src/clients/domain/value-objects/client-id.value";
+import { MilesAdded } from "../events/miles-added.event";
 import { TripPlanRegistered } from "../events/trip-plan-registered.event";
 
 export class TripPlan extends AggregateRoot {
@@ -39,6 +41,12 @@ export class TripPlan extends AggregateRoot {
 
 	public open() {
 		const event = new TripPlanRegistered();
+		this.apply(event);
+	}
+
+	/*POSIBLE ERROR*/
+	public add(client_id: ClientId) {
+		const event = new MilesAdded(client_id);
 		this.apply(event);
 	}
 }

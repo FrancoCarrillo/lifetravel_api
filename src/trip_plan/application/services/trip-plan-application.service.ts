@@ -6,15 +6,25 @@ import { Result } from "typescript-result";
 import { AppNotification } from "../../../common/application/app.notification";
 import { RegisterTripPlanRequestDto } from "../dtos/request/register-trip-plan-request.dto";
 import { RegisterTripPlanResponseDto } from "../dtos/response/register-trip-plan-response.dto";
+import { InjectRepository } from "@nestjs/typeorm";
 
 import { RegisterTripPlanValidator } from "../validators/register-trip-plan.validator";
 import { RegisterTripPlan } from "../commands/register-trip-plan.command";
 import { GetPaymentIdQuery } from '../queries/get-payment-id.query';
 import { GetClientIdQuery } from '../queries/get-client-id.query';
+import { ClientTypeORM } from 'src/common/infrastructure/persistence/typeorm/entities/client.typeorm';
+import { Repository } from 'typeorm';
+import { TripPlan } from 'src/trip_plan/domain/entities/trip-plan.entity';
+import { ClientId } from 'src/clients/domain/value-objects/client-id.value';
+
 
 @Injectable()
 export class TripPlanApplicationService {
 	constructor(
+		/*Posible error*/
+		@InjectRepository(ClientTypeORM)
+    	private clientRepository: Repository<ClientTypeORM>,
+
 		private commandBus: CommandBus,
 		private queryBus: QueryBus,
 		private registerTripPlanValidator: RegisterTripPlanValidator,
@@ -31,8 +41,23 @@ export class TripPlanApplicationService {
 		}
 
 		const { user_id, number, dni, plan_id, promotion } = registerTripPlanRequestDto;
+		let client_id: number;
 
-		const client_id: number = await this.queryBus.execute(new GetClientIdQuery(user_id, number, dni));
+		/*POSIBLE ERROR*/
+		const clientTypeORM: ClientTypeORM = await this.clientRepository.createQueryBuilder()
+      		.where("user_id= :user_id")
+     		.setParameter("user_id", registerTripPlanRequestDto.user_id)
+      		.getOne();
+
+
+		/*POSIBLE ERROR*/
+		if(clientTypeORM != null){
+			let trip_plan: TripPlan;
+			trip_plan.add(ClientId.of(clientTypeORM.userId.value));
+			client_id = clientTypeORM.id;
+		}
+		
+		else client_id = await this.queryBus.execute(new GetClientIdQuery(user_id, number, dni));
 
 		const payment_id: number = await this.queryBus.execute(new GetPaymentIdQuery(client_id, plan_id, promotion))
 
