@@ -6,13 +6,14 @@ import { PaymentsController } from "./api/payments.controller";
 import { AddPaymentHandler } from "./application/handlers/commands/add-payment.handler";
 import { PaymentTypeORM } from "./infrastructure/persistence/typeorm/entities/payment.typeorm";
 import { AddPaymentValidator } from "./application/validators/add-payment.validator";
+import { ClientTypeORM } from "../common/infrastructure/persistence/typeorm/entities/client.typeorm";
 
 export const CommandHandlers = [AddPaymentHandler];
 
 @Module({
   imports: [
     CqrsModule,
-    TypeOrmModule.forFeature([PaymentTypeORM]),
+    TypeOrmModule.forFeature([PaymentTypeORM, ClientTypeORM]),
   ],
   exports: [TypeOrmModule],
   controllers: [PaymentsController],

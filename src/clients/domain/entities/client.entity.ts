@@ -5,6 +5,8 @@ import { Miles } from '../../../common/domain/value-objects/miles.value';
 import { UserId } from '../../../users/domain/value-objects/user-id.value';
 import { DNI } from '../value-objects/dni.value';
 import { ClientOpened } from '../events/client-opened.event';
+import { Result } from "typescript-result";
+import { AppNotification } from "../../../common/application/app.notification";
 
 export class Client extends AggregateRoot {
   private id: ClientId;
@@ -35,6 +37,13 @@ export class Client extends AggregateRoot {
     );
     this.apply(event);
   }
+
+  public subtractMiles(): Result<AppNotification, Client>{
+    this.miles = this.miles.subtract();
+    return Result.ok(this);
+  }
+
+
   public getId(): ClientId {
     return this.id;
   }

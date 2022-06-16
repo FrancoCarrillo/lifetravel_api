@@ -8,6 +8,7 @@ import { MilesTypeORM } from '../../infrastructure/persistence/typeorm/value-obj
 export class ClientMapper {
   public static toTypeORM(client: Client): ClientTypeORM {
     const clientTypeORM: ClientTypeORM = new ClientTypeORM();
+
     clientTypeORM.id = client.getId() != null ? client.getId().getValue() : 0;
     clientTypeORM.number =
       client.getAccountNumber() != null

@@ -2,7 +2,7 @@ export class Miles {
   private readonly amount: number;
   private readonly currency: string;
 
-  private constructor(amount: number) {
+  public constructor(amount: number) {
     this.amount = Number(amount);
   }
 
@@ -14,8 +14,8 @@ export class Miles {
     return this.newMiles(this.amount + other.getAmount());
   }
 
-  public subtract(other: Miles): Miles {
-    return this.newMiles(this.amount - other.getAmount());
+  public subtract(): Miles {
+    return this.newMiles((this.amount - 300));
   }
 
   private newMiles(amount: number): Miles {

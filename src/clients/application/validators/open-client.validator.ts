@@ -38,14 +38,14 @@ export class OpenClientValidator {
       notification.addError('DNI is taken', null);
     }
 
-    const userTypeORM: UserTypeORM = await this.userRepository
-      .createQueryBuilder()
+    const userTypeORM: UserTypeORM = await this.userRepository.createQueryBuilder()
       .where("id = :id")
       .setParameter("id", openClientRequestDto.userId)
       .getOne();
 
     if(userTypeORM == null) {
       notification.addError('User not found', null);
+      return notification;
     }
 
     if(userTypeORM.type !== 'T'){

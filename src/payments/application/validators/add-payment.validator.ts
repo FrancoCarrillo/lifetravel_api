@@ -4,12 +4,15 @@ import { PaymentTypeORM } from "../../infrastructure/persistence/typeorm/entitie
 import { InjectRepository } from "@nestjs/typeorm";
 import { AddPaymentRequestDto } from "../dtos/request/add-payment-request.dto";
 import { AppNotification } from "../../../common/application/app.notification";
+import { ClientTypeORM } from "../../../common/infrastructure/persistence/typeorm/entities/client.typeorm";
 
 @Injectable()
 export class AddPaymentValidator {
   constructor(
     @InjectRepository(PaymentTypeORM)
-    private paymentRepository: Repository<PaymentTypeORM>
+    private paymentRepository: Repository<PaymentTypeORM>,
+    @InjectRepository(ClientTypeORM)
+    private clientRepository: Repository<ClientTypeORM>
   ) {}
 
   public async validate(
@@ -36,7 +39,14 @@ export class AddPaymentValidator {
       return notification;
     }
 
-    //Validar si el cliente existe
+    const clientTypeORM: ClientTypeORM = await this.clientRepository.createQueryBuilder()
+      .where("id= :id")
+      .setParameter("id", clientId)
+      .getOne();
+
+    if(clientTypeORM == null){
+      notification.addError("Client not found", null);
+    }
 
     return notification;
   }

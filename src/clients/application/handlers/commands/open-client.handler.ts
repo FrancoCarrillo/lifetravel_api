@@ -23,8 +23,7 @@ export class OpenClientHandler implements ICommandHandler<OpenClient> {
   ) {}
   async execute(command: OpenClient) {
     let clientId: number = 0;
-    const clientNumberResult: Result<AppNotification, AccountNumber> =
-      AccountNumber.create(command.number);
+    const clientNumberResult: Result<AppNotification, AccountNumber> = AccountNumber.create(command.number);
     if (clientNumberResult.isFailure()) {
       return clientId;
     }
@@ -32,7 +31,7 @@ export class OpenClientHandler implements ICommandHandler<OpenClient> {
     if (dniResult.isFailure()) {
         return clientId;
     }
-    const miles: Miles = Miles.create(0);
+    const miles: Miles = Miles.create(300);
     const userId: UserId = UserId.of(command.userId);
     let client: Client = ClientFactory.createFrom(
       userId,
