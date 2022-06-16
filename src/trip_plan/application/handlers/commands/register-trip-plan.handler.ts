@@ -34,12 +34,6 @@ export class RegisterTripPlanHandler implements ICommandHandler<RegisterTripPlan
 			return tripPlanId;
 		}
 
-		// tripPlanId = Number(tripPlanTypeORM.id);
-		// tripPlan.changeId(tripPlanId);
-		// tripPlan = this.publisher.mergeObjectContext(tripPlan);
-		// tripPlan.add();
-		// tripPlan.commit();
-
 		return tripPlanId;
 	}
 }

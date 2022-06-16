@@ -1,16 +1,20 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ClientTypeORM } from 'src/common/infrastructure/persistence/typeorm/entities/client.typeorm';
-import { PlanTypeORM } from 'src/services/infrastructure/persistence/typeorm/entities/plan.typeorm';
 import { Repository } from 'typeorm';
 
 import { AppNotification } from '../../../common/application/app.notification';
+
+import { ClientTypeORM } from 'src/common/infrastructure/persistence/typeorm/entities/client.typeorm';
+import { PlanTypeORM } from 'src/services/infrastructure/persistence/typeorm/entities/plan.typeorm';
+import { UserTypeORM } from 'src/users/infrastructure/persistence/typeorm/entities/user.typeorm';
 import { RegisterTripPlanRequestDto } from '../dtos/request/register-trip-plan-request.dto';
 
 @Injectable()
 export class RegisterTripPlanValidator {
 	constructor(
+		@InjectRepository(UserTypeORM)
+		private userRepository: Repository<UserTypeORM>,
 		@InjectRepository(ClientTypeORM)
 		private clientRepository: Repository<ClientTypeORM>,
 		@InjectRepository(PlanTypeORM)
@@ -20,29 +24,51 @@ export class RegisterTripPlanValidator {
 	public async validate(
 		registerTripPlanRequestDto: RegisterTripPlanRequestDto
 	): Promise<AppNotification> {
-		let notification: AppNotification = new AppNotification();
+		const notification: AppNotification = new AppNotification();
 
-		// Validar si el client_id existe en la db
-		const client = await this.clientRepository.findOne({
+		const number: string = registerTripPlanRequestDto.number.trim();
+		if (number.length <= 0) {
+			notification.addError('Account number is required', null);
+		}
+
+		const dni: string = registerTripPlanRequestDto.dni.trim();
+		if (dni.length <= 0) {
+			notification.addError('DNI is required', null);
+		}
+
+		if (notification.hasErrors()) {
+			return notification;
+		}
+		const clientTypeORM: ClientTypeORM = await this.clientRepository
+			.createQueryBuilder()
+			.where('dni = :dni', { dni })
+			.getOne();
+
+		if (clientTypeORM != null) {
+			notification.addError('DNI is taken', null);
+		}
+		
+		const user = await this.userRepository.findOne({
 			where: {
-				id: registerTripPlanRequestDto.client_id,
+				id: registerTripPlanRequestDto.user_id,
 			},
 		});
 
-		if (client == null) {
+		// Validar si el user_id existe en la db
+		if (user == null) {
 			notification.addError(
 				'The client id does not exist in the database',
 				null
 			);
 		}
 
-		// Validar si el plan_id existe en la db
 		const plan = await this.planRepository.findOne({
 			where: {
 				id: registerTripPlanRequestDto.plan_id,
 			},
 		});
 
+		// Validar si el plan_id existe en la db
 		if (plan == null) {
 			notification.addError(
 				'The plan id does not exist in the database',
@@ -61,9 +87,20 @@ export class RegisterTripPlanValidator {
 			);
 		}
 
-		if (notification.hasErrors()) {
-			return notification;
+		const userTypeORM: UserTypeORM = await this.userRepository
+			.createQueryBuilder()
+			.where("id = :id")
+			.setParameter("id", registerTripPlanRequestDto.user_id)
+			.getOne();
+
+		if (userTypeORM == null) {
+			notification.addError('User not found', null);
 		}
+
+		if (userTypeORM.type !== 'T') {
+			notification.addError('The user type must be traveler', null);
+		}
+
 
 		return notification;
 	}
