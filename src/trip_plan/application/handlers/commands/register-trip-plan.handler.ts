@@ -39,7 +39,6 @@ export class RegisterTripPlanHandler implements ICommandHandler<RegisterTripPlan
 		tripPlan = this.publisher.mergeObjectContext(tripPlan);
 		tripPlan.open();
 		tripPlan.commit();
-
 		return tripPlanId;
 	}
 }
