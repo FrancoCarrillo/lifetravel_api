@@ -3,6 +3,7 @@ import { CqrsModule, QueryHandler } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { RegisterTripPlanHandler } from "./application/handlers/commands/register-trip-plan.handler";
+import { GetClientIdHandler } from "./application/handlers/queries/get-client-id.handler";
 import { TripPlanApplicationService } from "./application/services/trip-plan-application.service";
 import { TripPlanController } from "./api/trip-plan.controller";
 import { RegisterTripPlanValidator } from "./application/validators/register-trip-plan.validator";
@@ -11,14 +12,15 @@ import { GetPaymentIdHandler } from './application/handlers/queries/get-payment-
 import { PaymentTypeORM } from 'src/payments/infrastructure/persistence/typeorm/entities/payment.typeorm';
 import { ClientTypeORM } from 'src/common/infrastructure/persistence/typeorm/entities/client.typeorm';
 import { PlanTypeORM } from 'src/services/infrastructure/persistence/typeorm/entities/plan.typeorm';
+import { UserTypeORM } from 'src/users/infrastructure/persistence/typeorm/entities/user.typeorm';
 
 export const CommandHandlers = [RegisterTripPlanHandler];
-export const QueryHandlers = [GetPaymentIdHandler];
+export const QueryHandlers = [GetPaymentIdHandler, GetClientIdHandler];
 
 @Module({
   imports: [
     CqrsModule,
-		TypeOrmModule.forFeature([TripPlanTypeORM,PaymentTypeORM,ClientTypeORM,PlanTypeORM]),
+		TypeOrmModule.forFeature([TripPlanTypeORM,PaymentTypeORM,ClientTypeORM,PlanTypeORM,UserTypeORM]),
   ],
   exports: [TypeOrmModule],
   controllers: [TripPlanController],

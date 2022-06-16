@@ -2,7 +2,6 @@
 import { CommandBus, IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { GetPaymentIdQuery } from "../../queries/get-payment-id.query";
 import { getManager } from "typeorm";
-import { RegisterTripPlan } from "../../commands/register-trip-plan.command";
 import { AddPayment } from "src/payments/application/commands/add-payment.command";
 
 @QueryHandler(GetPaymentIdQuery)
@@ -25,12 +24,8 @@ export class GetPaymentIdHandler implements IQueryHandler<GetPaymentIdQuery> {
 			return {}
 		};
 
-		let pricePlan: number = 0;
-		const price: any[] = ormPrice.map(function(ormPrice) {
-			pricePlan = ormPrice.price;
-			return pricePlan;
-		  })
-	  
+		const pricePlan = 0;
+
 		// client_id, price, promotion
 		const payment_id: number = await this.commandBus.execute(new AddPayment(client_id, pricePlan, promotion));
 

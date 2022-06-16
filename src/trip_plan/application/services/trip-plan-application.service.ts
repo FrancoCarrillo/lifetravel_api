@@ -10,6 +10,7 @@ import { RegisterTripPlanResponseDto } from "../dtos/response/register-trip-plan
 import { RegisterTripPlanValidator } from "../validators/register-trip-plan.validator";
 import { RegisterTripPlan } from "../commands/register-trip-plan.command";
 import { GetPaymentIdQuery } from '../queries/get-payment-id.query';
+import { GetClientIdQuery } from '../queries/get-client-id.query';
 
 @Injectable()
 export class TripPlanApplicationService {
@@ -29,9 +30,10 @@ export class TripPlanApplicationService {
 			return Result.error(notification);
 		}
 
-		const { client_id, plan_id, promotion } = registerTripPlanRequestDto;
+		const { user_id, number, dni, plan_id, promotion } = registerTripPlanRequestDto;
 
-		// TODO - Add your business logic here
+		const client_id: number = await this.queryBus.execute(new GetClientIdQuery(user_id, number, dni));
+
 		const payment_id: number = await this.queryBus.execute(new GetPaymentIdQuery(client_id, plan_id, promotion))
 
 		if(payment_id == invalid_promotion){
