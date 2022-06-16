@@ -10,9 +10,11 @@ import { ClientsApplicationService } from './application/services/clients-applic
 import { OpenClientValidator } from './application/validators/open-client.validator';
 import { ClientsController } from './api/clients.controller';
 import { UserTypeORM } from "../users/infrastructure/persistence/typeorm/entities/user.typeorm";
+import { PromotionAddedHandler } from "./application/handlers/events/promotion-added.handler";
+import { PromotionAddService } from "./application/services/promotion-add.service";
 
 export const CommandHandlers = [OpenClientHandler];
-export const EventHandlers = [ClientOpenedHandler];
+export const EventHandlers = [ClientOpenedHandler, PromotionAddedHandler];
 export const QueryHandlers = [GetClientsHandler, GetClientByIdHandler];
 
 @Module({
@@ -21,6 +23,7 @@ export const QueryHandlers = [GetClientsHandler, GetClientByIdHandler];
   providers: [
     ClientsApplicationService,
     OpenClientValidator,
+    PromotionAddService,
     ...CommandHandlers,
     ...EventHandlers,
     ...QueryHandlers,

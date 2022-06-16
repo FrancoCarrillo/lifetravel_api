@@ -34,7 +34,7 @@ export class ClientsApplicationService {
 			openClient.userId,
 			openClient.number,
 			openClient.dni,
-			0,
+			300,
 
 		);
 		return Result.ok(openClientResponse);

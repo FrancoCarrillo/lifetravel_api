@@ -23,6 +23,7 @@ export class TripPlanApplicationService {
 		registerTripPlanRequestDto: RegisterTripPlanRequestDto
 	): Promise<Result<AppNotification, RegisterTripPlanResponseDto>> {
 		const notification: AppNotification = await this.registerTripPlanValidator.validate(registerTripPlanRequestDto);
+		const invalid_promotion = -1;
 
 		if (notification.hasErrors()) {
 			return Result.error(notification);
@@ -33,6 +34,10 @@ export class TripPlanApplicationService {
 		// TODO - Add your business logic here
 		const payment_id: number = await this.queryBus.execute(new GetPaymentIdQuery(client_id, plan_id, promotion))
 
+		if(payment_id == invalid_promotion){
+			notification.addError("You don't have enough miles to get a promotion", null);
+			return Result.error(notification);
+		}
 		const registerTripPlan: RegisterTripPlan = new RegisterTripPlan(
 			client_id,
 			plan_id,

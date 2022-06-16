@@ -1,5 +1,6 @@
 import { AggregateRoot } from "@nestjs/cqrs";
 import { PaymentAdded } from "../events/payment-added.event";
+import { PromotionAdded } from "../events/promotion-added.event";
 
 export class Payment extends AggregateRoot {
   private _id: number;
@@ -31,6 +32,10 @@ export class Payment extends AggregateRoot {
 
   public add() {
     const event = new PaymentAdded(this.id, this.clientId, this.price);
+    this.apply(event);
+  }
+  public addPromotion(){
+    const event = new PromotionAdded(this.clientId);
     this.apply(event);
   }
 }

@@ -5,7 +5,7 @@ export class AccountNumber {
   private readonly value: string;
   private static MAX_LENGTH = 20;
 
-  private constructor(value: string) {
+  public constructor(value: string) {
     this.value = value;
   }
 

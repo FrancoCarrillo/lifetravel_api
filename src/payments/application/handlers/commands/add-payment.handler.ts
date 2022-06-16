@@ -6,20 +6,47 @@ import { Payment } from "../../../domain/entities/payment.entity";
 import { PaymentFactory } from "../../../domain/factories/payment.factory";
 import { PaymentMapper } from "../../mapper/payment.mapper";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ClientTypeORM } from "../../../../common/infrastructure/persistence/typeorm/entities/client.typeorm";
 
 @CommandHandler(AddPayment)
 export class AddPaymentHandler implements ICommandHandler<AddPayment> {
   constructor(
     @InjectRepository(PaymentTypeORM)
     private paymentRepository: Repository<PaymentTypeORM>,
+    @InjectRepository(ClientTypeORM)
+    private clientRepository: Repository<ClientTypeORM>,
     private publisher: EventPublisher,
   ) {}
 
   async execute(command: AddPayment) {
+
+    const invalid_promotion = -1;
+    const topMiles = 300;
     let paymentId: number = 0;
-    //modificar precio por descuento
-    const price: number = command.price;
+    let isPromotionAdd: boolean = false;
+
+    let price: number = command.price;
     const clientId: number = command.clientId;
+
+    if(command.promotion == 1)
+    {
+      const client = await this.clientRepository.findOne({
+        where: {
+          id: command.clientId,
+        },
+      });
+
+      if(client.miles.value >= topMiles)
+      {
+        price = price * 0.7;
+        isPromotionAdd = true;
+      }
+      else
+      {
+        paymentId = invalid_promotion;
+        return paymentId;
+      }
+    }
 
     let payment: Payment = PaymentFactory.createFrom(paymentId, clientId, price);
     let paymentTypeORM: PaymentTypeORM = PaymentMapper.toTypeORM(payment);
@@ -32,7 +59,13 @@ export class AddPaymentHandler implements ICommandHandler<AddPayment> {
     paymentId = Number(paymentTypeORM.id);
     payment.changeId(paymentId);
     payment = this.publisher.mergeObjectContext(payment);
-    payment.add();
+
+    // payment.add();
+    if(isPromotionAdd)
+    {
+      payment.addPromotion();
+    }
+
     payment.commit();
 
     return paymentId;

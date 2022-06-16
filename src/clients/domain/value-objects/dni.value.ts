@@ -5,7 +5,7 @@ export class DNI {
   private readonly value: string;
   private static MAX_LENGTH = 8;
 
-  private constructor(value: string) {
+  public constructor(value: string) {
     this.value = value;
   }
 
