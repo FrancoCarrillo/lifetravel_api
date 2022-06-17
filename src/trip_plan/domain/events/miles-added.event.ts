@@ -1,7 +1,5 @@
-import { ClientId } from "src/clients/domain/value-objects/client-id.value";
+import { ClientId } from 'src/clients/domain/value-objects/client-id.value';
 
 export class MilesAdded {
-    constructor(
-        client_id: ClientId
-    ) {}
+  constructor(public client_id: ClientId) {}
 }

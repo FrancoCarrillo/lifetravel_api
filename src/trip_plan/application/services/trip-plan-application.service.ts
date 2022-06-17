@@ -52,7 +52,8 @@ export class TripPlanApplicationService {
 
 		/*POSIBLE ERROR*/
 		if(clientTypeORM != null){
-			let trip_plan: TripPlan;
+			//El clien_id que ya existe, obtenerlo
+			const trip_plan: TripPlan = ;
 			trip_plan.add(ClientId.of(clientTypeORM.userId.value));
 			client_id = clientTypeORM.id;
 		}

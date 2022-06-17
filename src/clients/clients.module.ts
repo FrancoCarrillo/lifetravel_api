@@ -13,6 +13,7 @@ import { UserTypeORM } from "../users/infrastructure/persistence/typeorm/entitie
 import { PromotionAddedHandler } from "./application/handlers/events/promotion-added.handler";
 import { PromotionAddService } from "./application/services/promotion-add.service";
 import { MilesAddedHandler } from './application/handlers/events/miles-addded.handler';
+import {MilesAddService} from "./application/services/miles-application.service";
 
 export const CommandHandlers = [OpenClientHandler];
 export const EventHandlers = [ClientOpenedHandler, PromotionAddedHandler, MilesAddedHandler];
@@ -25,6 +26,7 @@ export const QueryHandlers = [GetClientsHandler, GetClientByIdHandler];
     ClientsApplicationService,
     OpenClientValidator,
     PromotionAddService,
+    MilesAddService,
     ...CommandHandlers,
     ...EventHandlers,
     ...QueryHandlers,
