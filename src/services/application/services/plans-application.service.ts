@@ -6,12 +6,17 @@ import { Result } from "typescript-result";
 import { AppNotification } from "../../../common/application/app.notification";
 import { AddPlanResponseDto } from "../dtos/response/add-plan-response.dto";
 import { AddPlan } from "../commands/add-plan.command";
+import { CityTypeORM } from "../../infrastructure/persistence/typeorm/entities/city.typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class PlansApplicationService {
   constructor(
     private commandBus: CommandBus,
     private addPlanValidator: AddPlanValidator,
+    @InjectRepository(CityTypeORM)
+    private cityRepository: Repository<CityTypeORM>,
   ) {}
 
   async add(
@@ -30,6 +35,15 @@ export class PlansApplicationService {
     );
 
     const planId: number = await this.commandBus.execute(addPlan);
+
+    const cityTypeORM: CityTypeORM = await this.cityRepository.createQueryBuilder()
+      .where("id = :id")
+      .setParameter("id", addPlanRequestDto.cityId)
+      .getOne()
+
+    if(cityTypeORM.countryId !== 1 ){
+      addPlan.price *= 0.27;
+    }
 
     const addPlanResponse: AddPlanResponseDto = new AddPlanResponseDto(
       planId,
