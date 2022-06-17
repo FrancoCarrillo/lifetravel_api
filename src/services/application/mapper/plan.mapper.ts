@@ -1,4 +1,4 @@
-import { Plan } from "../../domain/entities/plan.entity";
+import { Plan } from "../../domain/entities/Abastraction/plan.entity";
 import { PlanTypeORM } from "../../infrastructure/persistence/typeorm/entities/plan.typeorm";
 
 export class PlanMapper{
