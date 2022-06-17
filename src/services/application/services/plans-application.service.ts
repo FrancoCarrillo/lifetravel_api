@@ -34,22 +34,14 @@ export class PlansApplicationService {
       addPlanRequestDto.cityId
     );
 
-    const planId: number = await this.commandBus.execute(addPlan);
-
-    const cityTypeORM: CityTypeORM = await this.cityRepository.createQueryBuilder()
-      .where("id = :id")
-      .setParameter("id", addPlanRequestDto.cityId)
-      .getOne()
-
-    if(cityTypeORM.countryId !== 1 ){
-      addPlan.price *= 0.27;
-    }
+    const planResponse: any = await this.commandBus.execute(addPlan);
 
     const addPlanResponse: AddPlanResponseDto = new AddPlanResponseDto(
-      planId,
-      addPlan.price,
+      planResponse.id,
+      planResponse.price,
       addPlan.travelDays,
-      addPlan.cityId
+      addPlan.cityId,
+      planResponse.description,
     );
     return Result.ok(addPlanResponse);
   }
