@@ -60,6 +60,10 @@ export class AddPlanHandler implements ICommandHandler<AddPlan> {
     planType.open();
     planType.commit();
 
-    return planId;
+    return {
+      "id": planId,
+      "price": planType.price,
+      "description": planType.typePlan.generateDescription()
+    };
   }
 }

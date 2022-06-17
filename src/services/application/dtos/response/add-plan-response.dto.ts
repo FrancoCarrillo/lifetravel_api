@@ -4,5 +4,6 @@ export class AddPlanResponseDto {
     public readonly price: number,
     public readonly travelDays: number,
     public readonly cityId: number,
+    public readonly description: number
   ) {}
 }
