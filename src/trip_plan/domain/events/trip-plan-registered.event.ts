@@ -1,7 +1,5 @@
 
 export class TripPlanRegistered {
-  constructor(
-    
-  ) {}
+  constructor() {}
 
 }
