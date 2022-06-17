@@ -10,8 +10,8 @@ export class Miles {
     return new Miles(amount);
   }
 
-  public add(other: Miles): Miles {
-    return this.newMiles(this.amount + other.getAmount());
+  public add(): Miles {
+    return this.newMiles(this.amount + 50);
   }
 
   public subtract(): Miles {

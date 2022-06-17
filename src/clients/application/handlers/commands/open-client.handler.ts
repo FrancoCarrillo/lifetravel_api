@@ -31,7 +31,7 @@ export class OpenClientHandler implements ICommandHandler<OpenClient> {
     if (dniResult.isFailure()) {
         return clientId;
     }
-    const miles: Miles = Miles.create(300);
+    const miles: Miles = Miles.create(50);
     const userId: UserId = UserId.of(command.userId);
     let client: Client = ClientFactory.createFrom(
       userId,
