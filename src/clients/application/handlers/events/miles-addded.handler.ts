@@ -33,7 +33,7 @@ export class MilesAddedHandler implements IEventHandler<MilesAdded> {
       return;
     }
 
-    const clientId: ClientId = event.client_id;
+    const clientId: ClientId = ClientId.of(event.client_id);
     const userId: UserId = UserId.of(fromClientTypeORM.userId.value);
     const accountNumber: AccountNumber = new AccountNumber(
       fromClientTypeORM.number.value,
@@ -44,9 +44,9 @@ export class MilesAddedHandler implements IEventHandler<MilesAdded> {
     const client: Client = new Client(userId, accountNumber, dni, miles);
     client.changeId(clientId);
 
-    const subtractOk = this.milesAddService.promotion(client);
+    const addedOk = this.milesAddService.miles(client);
 
-    if (!subtractOk) {
+    if (!addedOk) {
       console.log('Miles Add Error');
       return;
     }

@@ -27,12 +27,14 @@ export class TripPlanApplicationService {
 
 		private commandBus: CommandBus,
 		private queryBus: QueryBus,
+
 		private registerTripPlanValidator: RegisterTripPlanValidator,
 	) { }
 
 	async create(
 		registerTripPlanRequestDto: RegisterTripPlanRequestDto
 	): Promise<Result<AppNotification, RegisterTripPlanResponseDto>> {
+
 		const notification: AppNotification = await this.registerTripPlanValidator.validate(registerTripPlanRequestDto);
 		const invalid_promotion = -1;
 
@@ -41,24 +43,9 @@ export class TripPlanApplicationService {
 		}
 
 		const { user_id, number, dni, plan_id, promotion } = registerTripPlanRequestDto;
-		let client_id: number;
-
-		/*POSIBLE ERROR*/
-		const clientTypeORM: ClientTypeORM = await this.clientRepository.createQueryBuilder()
-      		.where("user_id= :user_id")
-     		.setParameter("user_id", registerTripPlanRequestDto.user_id)
-      		.getOne();
 
 
-		/*POSIBLE ERROR*/
-		if(clientTypeORM != null){
-			//El clien_id que ya existe, obtenerlo
-			const trip_plan: TripPlan = ;
-			trip_plan.add(ClientId.of(clientTypeORM.userId.value));
-			client_id = clientTypeORM.id;
-		}
-		
-		else client_id = await this.queryBus.execute(new GetClientIdQuery(user_id, number, dni));
+		const client_id = await this.queryBus.execute(new GetClientIdQuery(user_id, number, dni));
 
 		const payment_id: number = await this.queryBus.execute(new GetPaymentIdQuery(client_id, plan_id, promotion))
 

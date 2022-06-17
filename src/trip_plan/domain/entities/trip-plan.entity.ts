@@ -44,8 +44,8 @@ export class TripPlan extends AggregateRoot {
   }
 
   /*POSIBLE ERROR*/
-  public add(client_id: ClientId) {
-    const event = new MilesAdded(client_id);
+  public add() {
+    const event = new MilesAdded(this.client_id);
     this.apply(event);
   }
 }
