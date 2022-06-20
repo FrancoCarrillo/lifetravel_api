@@ -2,15 +2,15 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { MilesAdded } from 'src/trip_plan/domain/events/miles-added.event';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClientTypeORM } from '../../../../common/infrastructure/persistence/typeorm/entities/client.typeorm';
-import {getManager, Repository} from 'typeorm';
+import { getManager, Repository} from 'typeorm';
 import { MilesAddService } from '../../services/miles-application.service';
 import { ClientId } from '../../../domain/value-objects/client-id.value';
 import { UserId } from '../../../../users/domain/value-objects/user-id.value';
 import { AccountNumber } from '../../../domain/value-objects/account-number.value';
 import { DNI } from '../../../domain/value-objects/dni.value';
 import { Miles } from '../../../../common/domain/value-objects/miles.value';
-import {Client} from "../../../domain/entities/client.entity";
-import {ClientMapper} from "../../mappers/client.mapper";
+import { Client } from '../../../domain/entities/client.entity';
+import { ClientMapper } from '../../mappers/client.mapper';
 
 @EventsHandler(MilesAdded)
 export class MilesAddedHandler implements IEventHandler<MilesAdded> {

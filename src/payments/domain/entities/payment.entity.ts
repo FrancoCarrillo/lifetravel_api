@@ -1,6 +1,6 @@
-import { AggregateRoot } from "@nestjs/cqrs";
-import { PaymentAdded } from "../events/payment-added.event";
-import { PromotionAdded } from "../events/promotion-added.event";
+import {AggregateRoot} from "@nestjs/cqrs";
+import {PaymentAdded} from "../events/payment-added.event";
+import {PromotionAdded} from "../events/promotion-added.event";
 
 export class Payment extends AggregateRoot {
   private _id: number;

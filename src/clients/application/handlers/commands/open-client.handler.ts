@@ -22,14 +22,15 @@ export class OpenClientHandler implements ICommandHandler<OpenClient> {
     private publisher: EventPublisher,
   ) {}
   async execute(command: OpenClient) {
-    let clientId: number = 0;
-    const clientNumberResult: Result<AppNotification, AccountNumber> = AccountNumber.create(command.number);
+    let clientId = 0;
+    const clientNumberResult: Result<AppNotification, AccountNumber> =
+      AccountNumber.create(command.number);
     if (clientNumberResult.isFailure()) {
       return clientId;
     }
     const dniResult: Result<AppNotification, DNI> = DNI.create(command.dni);
     if (dniResult.isFailure()) {
-        return clientId;
+      return clientId;
     }
     const miles: Miles = Miles.create(50);
     const userId: UserId = UserId.of(command.userId);
