@@ -7,7 +7,6 @@ import { AppNotification } from '../../common/application/app.notification';
 import { Result } from 'typescript-result';
 import { RegisterTravelerResponse } from '../application/dtos/response/register-traveler-response.dto';
 import { ApiController } from '../../common/api/api.controller';
-import { RegisterAgency } from '../application/commands/register-agency.command';
 import { RegisterAgencyRequest } from '../application/dtos/request/register-agency-request.dto';
 import { RegisterAgencyResponse } from '../application/dtos/response/register-agency-response.dto';
 import { GetUsersTravelerQuery } from '../application/queries/get-users-traveler.query';

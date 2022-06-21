@@ -43,6 +43,7 @@ export class Client extends AggregateRoot {
     this.miles = this.miles.subtract();
     return Result.ok(this);
   }
+
   public addMiles(): Result<AppNotification, Client> {
     this.miles = this.miles.add();
     return Result.ok(this);

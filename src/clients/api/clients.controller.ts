@@ -47,7 +47,9 @@ export class ClientsController {
     @Res({ passthrough: true }) response,
   ): Promise<object> {
     try {
-      const clients = await this.queryBus.execute(new GetClientByIdQuery(clientId));
+      const clients = await this.queryBus.execute(
+        new GetClientByIdQuery(clientId),
+      );
       return ApiController.ok(response, clients);
     } catch (error) {
       return ApiController.serverError(response, error);

@@ -8,54 +8,51 @@ import { AppNotification } from '../../../../common/application/app.notification
 import { Result } from 'typescript-result';
 import { Email } from '../../../../common/domain/value-objects/email.value';
 import { Password } from '../../../../common/domain/value-objects/password.value';
-import { Traveler } from '../../../domain/entities/traveler.entity';
-import { TravelerFactory } from '../../../domain/factories/traveler.factory';
 import { TravelerMapper } from '../../mappers/traveler.mapper';
 import { UserId } from '../../../domain/value-objects/user-id.value';
+import UserFactory from 'src/users/domain/factories/abstract/user.factory';
+import { UserType } from 'src/users/domain/enums/user-type.enum';
 
 @CommandHandler(RegisterTraveler)
 export class RegisterTravelerHandler
-  implements ICommandHandler<RegisterTraveler>
+	implements ICommandHandler<RegisterTraveler>
 {
-  constructor(
-    @InjectRepository(TravelerTypeORM)
-    private travelerRepository: Repository<TravelerTypeORM>,
-    private publisher: EventPublisher,
-  ) {}
+	constructor(
+		@InjectRepository(TravelerTypeORM)
+		private travelerRepository: Repository<TravelerTypeORM>,
+		private publisher: EventPublisher,
+	) { }
 
-  async execute(command: RegisterTraveler) {
-    let userId:number = 0;
-    const travelerNameResult: Result<AppNotification, TravelerName> =
-      TravelerName.create(command.firstName, command.lastName);
-    if (travelerNameResult.isFailure()) {
-      return userId;
-    }
-    const travelerEmailResult: Result<AppNotification, Email> = Email.create(
-      command.email,
-    );
-    if (travelerEmailResult.isFailure()) {
-      return userId;
-    }
-    const travelerPasswordResult: Result<AppNotification, Password> =
-      Password.create(command.password);
-    if (travelerPasswordResult.isFailure()) {
-      return userId;
-    }
-    let traveler: Traveler = TravelerFactory.createFrom(
-      travelerNameResult.value,
-      travelerEmailResult.value,
-      travelerPasswordResult.value,
-    );
-    let travelerTypeORM: TravelerTypeORM = TravelerMapper.toTypeORM(traveler);
-    travelerTypeORM = await this.travelerRepository.save(travelerTypeORM);
-    if (travelerTypeORM == null) {
-      return userId;
-    }
-    userId = Number(travelerTypeORM.id);
-    traveler.changeId(UserId.of(userId));
-    traveler = this.publisher.mergeObjectContext(traveler);
-    traveler.register();
-    traveler.commit();
-    return userId;
-  }
+	async execute(command: RegisterTraveler) {
+		let userId: number = 0;
+		const travelerNameResult: Result<AppNotification, TravelerName> =
+			TravelerName.create(command.firstName, command.lastName);
+		if (travelerNameResult.isFailure()) {
+			return userId;
+		}
+		const travelerEmailResult: Result<AppNotification, Email> = Email.create(
+			command.email,
+		);
+		if (travelerEmailResult.isFailure()) {
+			return userId;
+		}
+		const travelerPasswordResult: Result<AppNotification, Password> =
+			Password.create(command.password);
+		if (travelerPasswordResult.isFailure()) {
+			return userId;
+		}
+		let userTraveler = UserFactory.getUser(UserType.TRAVELER)
+		let traveler = userTraveler.createUser(travelerNameResult.value, travelerEmailResult.value, travelerPasswordResult.value)
+		let travelerTypeORM: TravelerTypeORM = TravelerMapper.toTypeORM(traveler);
+		travelerTypeORM = await this.travelerRepository.save(travelerTypeORM);
+		if (travelerTypeORM == null) {
+			return userId;
+		}
+		userId = Number(travelerTypeORM.id);
+		traveler.changeId(UserId.of(userId));
+		traveler = this.publisher.mergeObjectContext(traveler);
+		traveler.register();
+		traveler.commit();
+		return userId;
+	}
 }
