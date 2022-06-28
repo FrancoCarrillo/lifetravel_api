@@ -19,19 +19,20 @@ export class AddPlanValidator {
     addPlanRequestDto: AddPlanRequestDto,
   ): Promise<AppNotification> {
     let notification: AppNotification = new AppNotification();
+    const emptyValue = 0;
 
     const price: number = addPlanRequestDto.price;
-    if(price <= 0){
+    if(price <= emptyValue){
       notification.addError('The price must be greater than zero', null);
     }
 
     const travelDays: number = addPlanRequestDto.travelDays;
-    if(travelDays <= 0){
+    if(travelDays <= emptyValue){
       notification.addError('The travel days must be greater than zero', null);
     }
 
     const cityId: number = addPlanRequestDto.cityId;
-    if(cityId <= 0){
+    if(cityId <= emptyValue){
       notification.addError('The city id must be greater than zero', null);
     }
 

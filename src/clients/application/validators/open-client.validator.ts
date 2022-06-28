@@ -19,12 +19,13 @@ export class OpenClientValidator {
     openClientRequestDto: OpenClientRequest,
   ): Promise<AppNotification> {
     const notification: AppNotification = new AppNotification();
+    const emptyValue = 0;
     const number: string = openClientRequestDto.number.trim();
-    if (number.length <= 0) {
+    if (number.length <= emptyValue) {
       notification.addError('Account number is required', null);
     }
     const dni: string = openClientRequestDto.dni.trim();
-    if (dni.length <= 0) {
+    if (dni.length <= emptyValue) {
       notification.addError('DNI is required', null);
     }
     if (notification.hasErrors()) {

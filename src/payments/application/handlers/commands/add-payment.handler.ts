@@ -22,13 +22,16 @@ export class AddPaymentHandler implements ICommandHandler<AddPayment> {
 
     const invalid_promotion = -1;
     const topMiles = 300;
+    const discount = 0.7;
+    const promotionValid = 1;
     let paymentId: number = 0;
     let isPromotionAdd: boolean = false;
+  
 
     let price: number = command.price;
     const clientId: number = command.clientId;
 
-    if(command.promotion == 1)
+    if(command.promotion == promotionValid)
     {
       const client = await this.clientRepository.findOne({
         where: {
@@ -38,7 +41,7 @@ export class AddPaymentHandler implements ICommandHandler<AddPayment> {
 
       if(client.miles.value >= topMiles)
       {
-        price = price * 0.7;
+        price = price * discount;
         isPromotionAdd = true;
       }
       else
@@ -60,7 +63,7 @@ export class AddPaymentHandler implements ICommandHandler<AddPayment> {
     payment.changeId(paymentId);
     payment = this.publisher.mergeObjectContext(payment);
 
-    // payment.add();
+
     if(isPromotionAdd)
     {
       payment.addPromotion();

@@ -18,6 +18,7 @@ export class ClientsApplicationService {
 	async open(
 		openClientRequestDto: OpenClientRequest,
 	): Promise<Result<AppNotification, OpenClientResponse>> {
+		const initialMiles = 50;
 		const notification: AppNotification =
 			await this.openClientValidator.validate(openClientRequestDto);
 		if (notification.hasErrors()) {
@@ -34,7 +35,7 @@ export class ClientsApplicationService {
 			openClient.userId,
 			openClient.number,
 			openClient.dni,
-			50,
+			initialMiles,
 		);
 		return Result.ok(openClientResponse);
 	}

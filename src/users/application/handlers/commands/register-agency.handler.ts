@@ -40,7 +40,7 @@ export class RegisterAgencyHandler implements ICommandHandler<RegisterAgency> {
 			return userId;
 		}
 
-		let userAgency = UserFactory.getUser(UserType.TRAVELER)
+		let userAgency = UserFactory.getUser(UserType.AGENCY)
 		let agency = userAgency.createUser(agencyNameResult.value,
 			agencyEmailResult.value,
 			agencyPasswordResult.value)

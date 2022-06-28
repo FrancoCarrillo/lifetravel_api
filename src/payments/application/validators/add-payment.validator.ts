@@ -19,19 +19,22 @@ export class AddPaymentValidator {
     addPaymentDto: AddPaymentRequestDto
   ): Promise<AppNotification> {
     let notification: AppNotification = new AppNotification();
+    const emptyValue = 0;
+    const nonePromotion = 0;
+    const afirmativePromotion = 0;
 
     const price: number = addPaymentDto.price;
-    if(price <= 0){
+    if(price <= emptyValue){
       notification.addError('The price must be greater than zero', null);
     }
 
     const clientId: number = addPaymentDto.clientId;
-    if(clientId <= 0){
+    if(clientId <= emptyValue){
       notification.addError('The client id must be greater than zero', null);
     }
 
     const promotion: number = addPaymentDto.promotion;
-    if(promotion !== 0 && promotion !== 1){
+    if(promotion !== nonePromotion && promotion !== afirmativePromotion){
       notification.addError('The promotion can only have a value of 0 or 1', null);
     }
 

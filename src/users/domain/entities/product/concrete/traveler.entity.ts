@@ -28,6 +28,7 @@ export default class Traveler extends User {
 	public getName(): TravelerName {
 		return this.name;
 	}
+
 	public getEmail(): Email {
 		return this.email;
 	}

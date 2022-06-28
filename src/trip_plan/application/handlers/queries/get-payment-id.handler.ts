@@ -27,7 +27,6 @@ export class GetPaymentIdHandler implements IQueryHandler<GetPaymentIdQuery> {
 
 		const pricePlan = planTypeORM.price;
 
-		// client_id, price, promotion
 		const payment_id: number = await this.commandBus.execute(new AddPayment(client_id, pricePlan, promotion));
 
 		return payment_id;

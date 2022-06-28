@@ -25,14 +25,15 @@ export class RegisterTripPlanValidator {
 		registerTripPlanRequestDto: RegisterTripPlanRequestDto
 	): Promise<AppNotification> {
 		const notification: AppNotification = new AppNotification();
+		const emptyValue = 0;
 
 		const number: string = registerTripPlanRequestDto.number.trim();
-		if (number.length <= 0) {
+		if (number.length <= emptyValue) {
 			notification.addError('Account number is required', null);
 		}
 
 		const dni: string = registerTripPlanRequestDto.dni.trim();
-		if (dni.length <= 0) {
+		if (dni.length <= emptyValue) {
 			notification.addError('DNI is required', null);
 		}
 
@@ -54,7 +55,6 @@ export class RegisterTripPlanValidator {
 			},
 		});
 
-		// Validar si el user_id existe en la db
 		if (user == null) {
 			notification.addError(
 				'The client id does not exist in the database',
@@ -68,7 +68,6 @@ export class RegisterTripPlanValidator {
 			},
 		});
 
-		// Validar si el plan_id existe en la db
 		if (plan == null) {
 			notification.addError(
 				'The plan id does not exist in the database',

@@ -43,7 +43,6 @@ export class TripPlan extends AggregateRoot {
     this.apply(event);
   }
 
-  /*POSIBLE ERROR*/
   public add() {
     const event = new MilesAdded(this.client_id);
     this.apply(event);
